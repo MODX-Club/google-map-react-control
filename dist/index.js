@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
 	value: true
 });
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = require('react');
@@ -32,7 +34,12 @@ var GoogleMapReactControl = function (_React$Component) {
 
 		var _this = _possibleConstructorReturn(this, (GoogleMapReactControl.__proto__ || Object.getPrototypeOf(GoogleMapReactControl)).call(this, props));
 
-		_this.state = {};
+		var ready = props.ready;
+
+
+		_this.state = {
+			ready: ready
+		};
 
 		// this._reactInternalInstance = {};
 
@@ -60,14 +67,31 @@ var GoogleMapReactControl = function (_React$Component) {
 	}, {
 		key: 'render',
 		value: function render() {
-			var other = _objectWithoutProperties(this.props, []);
+			var _props2 = this.props,
+			    propsReady = _props2.ready,
+			    _props2$style = _props2.style,
+			    style = _props2$style === undefined ? {} : _props2$style,
+			    maps = _props2.maps,
+			    map = _props2.map,
+			    position = _props2.position,
+			    other = _objectWithoutProperties(_props2, ['ready', 'style', 'maps', 'map', 'position']);
 
-			return _react2.default.createElement('div', other);
+			var ready = this.state.ready;
+
+
+			return _react2.default.createElement('div', _extends({
+				style: Object.assign({
+					position: "absolute",
+					display: !ready ? "none" : undefined
+				}, style)
+			}, other));
 		}
 	}]);
 
 	return GoogleMapReactControl;
 }(_react2.default.Component);
 
-GoogleMapReactControl.defaultProps = {};
+GoogleMapReactControl.defaultProps = {
+	ready: true
+};
 exports.default = GoogleMapReactControl;

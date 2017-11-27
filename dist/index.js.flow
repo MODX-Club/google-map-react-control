@@ -1,5 +1,3 @@
-// @flow
-
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -30,13 +28,20 @@ export default class GoogleMapReactControl extends React.Component { // eslint-d
 	_reactInternalInstance: _reactInternalInstance;
 
 	static defaultProps = {
+		ready: true,
 	};
 
 	constructor(props: Props) {
 
 		super(props);
 
-		this.state = {};
+		const {
+			ready,
+		} = props;
+
+		this.state = {
+			ready,
+		};
 
 		// this._reactInternalInstance = {};
 
@@ -65,10 +70,23 @@ export default class GoogleMapReactControl extends React.Component { // eslint-d
 	render() {
 
 		const {
+			ready: propsReady,
+			style = {},
+			maps,
+			map,
+			position,
 			...other
 		} = this.props;
 
+		const {
+			ready,
+		} = this.state;
+
 		return (<div
+			style={Object.assign({
+				position: "absolute",
+				display: !ready ? "none" : undefined,
+			}, style)}
 			{ ...other }
 		>
 		</div>);
@@ -80,6 +98,9 @@ GoogleMapReactControl.propTypes = {
 	map: PropTypes.object.isRequired,
 	maps: PropTypes.object.isRequired,
 	position: PropTypes.oneOf([
+		'LEFT_TOP',
+		'LEFT_CENTER',
+		'LEFT_BOTTOM',
 		'TOP_LEFT',
 		'TOP',
 		'TOP_RIGHT',
@@ -89,5 +110,8 @@ GoogleMapReactControl.propTypes = {
 		'BOTTOM_LEFT',
 		'BOTTOM',
 		'BOTTOM_RIGHT',
+		'RIGHT_TOP',
+		'RIGHT_CENTER',
+		'RIGHT_BOTTOM',
 	]).isRequired,
 };
