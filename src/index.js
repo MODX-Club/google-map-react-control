@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-type Props = {
+import Portal from 'material-ui/Portal';
+
+let Props = {
 	map: {
 		controls: {},
 	},
@@ -11,9 +13,10 @@ type Props = {
 	position: "",
 };
 
-type State = {};
+let State = {
+};
 
-type _reactInternalInstance = {
+let _reactInternalInstance = {
 	_renderedComponent: {
 		_hostNode: {
 
@@ -23,15 +26,38 @@ type _reactInternalInstance = {
 
 export default class GoogleMapReactControl extends React.Component { // eslint-disable-line react/prefer-stateless-function
 
-	state: State;
-
-	_reactInternalInstance: _reactInternalInstance;
-
+	static propTypes = {
+		map: PropTypes.object.isRequired,
+		maps: PropTypes.object.isRequired,
+		containerProps: PropTypes.object,
+		position: PropTypes.oneOf([
+			'LEFT_TOP',
+			'LEFT_CENTER',
+			'LEFT_BOTTOM',
+			'TOP_LEFT',
+			'TOP',
+			'TOP_RIGHT',
+			'CENTER_LEFT',
+			'CENTER',
+			'CENTER_RIGHT',
+			'BOTTOM_LEFT',
+			'BOTTOM',
+			'BOTTOM_RIGHT',
+			'RIGHT_TOP',
+			'RIGHT_CENTER',
+			'RIGHT_BOTTOM',
+		]).isRequired,
+	};
+	
 	static defaultProps = {
 		ready: true,
 	};
 
-	constructor(props: Props) {
+	state = State;
+
+	_reactInternalInstance = _reactInternalInstance;
+
+	constructor(props) {
 
 		super(props);
 
@@ -47,25 +73,60 @@ export default class GoogleMapReactControl extends React.Component { // eslint-d
 
 	}
 
-	componentDidMount() {
+
+	componentWillMount(){
 
 		const {
 			map,
 			maps,
 			position,
+			containerProps,
 		} = this.props;
 
-		const renderedComponent = this && this._reactInternalInstance && this._reactInternalInstance._renderedComponent || undefined;
+		if(!maps || !map){
+			return false;
+		}
+
+		let div = document.createElement("div");
+
+		// div.style="color:red;";
+
+		Object.assign(div, containerProps);
 
 		const pos = position && maps.ControlPosition && maps.ControlPosition[position] && map.controls && map.controls[maps.ControlPosition[position]];
 
-		if (pos && renderedComponent) {
+		if (pos) {
 
-			pos.push(renderedComponent._hostNode);
+			pos.push(div);
 
 		}
 
+		Object.assign(this.state, {
+			container: div,
+		});
 	}
+
+
+	// componentDidMount__() {
+
+	// 	const {
+	// 		map,
+	// 		maps,
+	// 		position,
+	// 	} = this.props;
+
+	// 	const renderedComponent = this && this._reactInternalInstance && this._reactInternalInstance._renderedComponent || undefined;
+
+	// 	const pos = position && maps.ControlPosition && maps.ControlPosition[position] && map.controls && map.controls[maps.ControlPosition[position]];
+
+	// 	if (pos && renderedComponent) {
+
+	// 		pos.push(renderedComponent._hostNode);
+
+	// 	}
+
+	// }
+	
 
 	render() {
 
@@ -75,43 +136,32 @@ export default class GoogleMapReactControl extends React.Component { // eslint-d
 			maps,
 			map,
 			position,
+			containerProps,
+			children,
 			...other
 		} = this.props;
 
 		const {
 			ready,
+			container,
 		} = this.state;
 
-		return (<div
-			style={Object.assign({
-				position: "absolute",
-				display: !ready ? "none" : undefined,
-			}, style)}
-			{ ...other }
+		if(!container){
+			return null;
+		}
+
+		return (<Portal
+			container={container}
 		>
-		</div>);
+			<div
+				style={Object.assign({
+					// position: "absolute",
+					// display: !ready ? "none" : undefined,
+				}, style)}
+			>
+				{children}
+			</div>
+		</Portal>);
 
 	}
 }
-
-GoogleMapReactControl.propTypes = {
-	map: PropTypes.object.isRequired,
-	maps: PropTypes.object.isRequired,
-	position: PropTypes.oneOf([
-		'LEFT_TOP',
-		'LEFT_CENTER',
-		'LEFT_BOTTOM',
-		'TOP_LEFT',
-		'TOP',
-		'TOP_RIGHT',
-		'CENTER_LEFT',
-		'CENTER',
-		'CENTER_RIGHT',
-		'BOTTOM_LEFT',
-		'BOTTOM',
-		'BOTTOM_RIGHT',
-		'RIGHT_TOP',
-		'RIGHT_CENTER',
-		'RIGHT_BOTTOM',
-	]).isRequired,
-};

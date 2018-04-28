@@ -1,6 +1,6 @@
 {
   "name": "google-map-react-control",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "",
   "main": "dist/index.min.js",
   "files": [
@@ -36,8 +36,8 @@
   "license": "MIT",
   "homepage": "https://modxclub.ru/",
   "peerDependencies": {
-    "prop-types": "^15.0",
-    "react": "^^15.0.0-rc || ^15.0"
+    "prop-types": "^16.0.0",
+    "react": "^16.0.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
